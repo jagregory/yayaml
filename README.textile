@@ -12,9 +12,10 @@ I needed a simple file format for hash data, and I didn't want to use XML. I cou
 
 h2. How do I use it?
 
-# Download the source and build it
-# Reference it
-# Use as so:
+ # Download the source and build it
+ # Reference it
+ # Use as so:
+
 <pre>
 var yaml = new Yaml();
 var document = yaml.ParseFile("my file name.yaml");
