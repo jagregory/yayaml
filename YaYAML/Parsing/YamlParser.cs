@@ -257,7 +257,7 @@ namespace YaYAML.Parsing
                         return MetaRules.Fail(out result2, out modifiedStream2);
                     }
                     items = result2;
-                    result2 = ( new YamlSequence(items.ToIEnumerable<YamlSequenceItem>()) ).AsHostExpressionList();
+                    result2 = ( new YamlSequence(items.ToIEnumerable<IYamlSequenceItem>()) ).AsHostExpressionList();
                     return MetaRules.Success();
                 }, modifiedStream, out result, out modifiedStream))
             {
@@ -290,7 +290,7 @@ namespace YaYAML.Parsing
                     {
                         return MetaRules.Fail(out result2, out modifiedStream2);
                     }
-                    result2 = ( new YamlSequenceItem(text.As<string>()) ).AsHostExpressionList();
+                    result2 = ( new YamlSequenceItem<YamlText>(new YamlText(text.As<string>())) ).AsHostExpressionList();
                     return MetaRules.Success();
                 }, modifiedStream, out result, out modifiedStream))
             {

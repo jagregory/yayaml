@@ -1,12 +1,12 @@
 namespace YaYAML
 {
-    public class YamlSequenceItem : IYamlEntity
+    public class YamlSequenceItem<T> : IYamlSequenceItem where T : IYamlEntity
     {
-        public YamlSequenceItem(string contents)
+        public YamlSequenceItem(T contents)
         {
             Contents = contents;
         }
 
-        public string Contents { get; private set; }
+        public IYamlEntity Contents { get; private set; }
     }
 }

@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IYamlEntity.cs" />
+    <Compile Include="IYamlSequenceItem.cs" />
     <Compile Include="Parsing\YamlParser.cs" />
     <Compile Include="Yaml.cs" />
     <Compile Include="YamlDocument.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="YamlSequence.cs" />
     <Compile Include="YamlSequenceItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="YamlText.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Parsing\YamlParser.ometacs" />
