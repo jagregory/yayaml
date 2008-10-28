@@ -6,12 +6,14 @@ ometa YaYAML.Parsing.YamlParser : Parser {
            | Sequence:s -> { new YamlDocument(s.As<YamlSequence>()) },
 
   Mapping = MappingPair+:pairs -> { new YamlMapping(pairs.ToIEnumerable<YamlMappingPair>()) },
-  MappingKey = (~':' ~NewLine Character)+:key ':' -> { key },
+  MappingKey = Spaces (~':' ~NewLine ~SequenceItemID Character)+:key ':' -> { key },
   MappingPair = MappingKey:key NewLine MultilineText:value -> { new YamlMappingPair(key.As<string>(), value.As<string>()) }
               | MappingKey:key Spaces Text:value OptNewLine -> { new YamlMappingPair(key.As<string>(), value.As<string>()) },
 
-  Sequence = SequenceItem+:items -> { new YamlSequence(items.ToIEnumerable<IYamlSequenceItem>()) },
-  SequenceItem = '-' Space Text:text OptNewLine -> { new YamlSequenceItem<YamlText>(new YamlText(text.As<string>())) },
+  Sequence = SequenceItem+:items -> { new YamlSequence(items.ToIEnumerable<IYamlEntity>()) },
+  SequenceItemID = '-' Space,
+  SequenceItem = SequenceItemID Mapping:map OptNewLine -> { map.As<YamlMapping>() }
+               | SequenceItemID Text:text OptNewLine -> { new YamlText(text.As<string>()) },
   
   MultilineText = MultilineTextLine+:lines -> { lines.Join(" ") },
   MultilineTextLine = Space+:s Text:text<string> OptNewLine -> { text },

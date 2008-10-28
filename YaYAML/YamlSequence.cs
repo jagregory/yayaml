@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace YaYAML
 {
-    public class YamlSequence : IList<IYamlSequenceItem>, IYamlEntity
+    public class YamlSequence : IList<IYamlEntity>, IYamlEntity
     {
-        private readonly IList<IYamlSequenceItem> internalList = new List<IYamlSequenceItem>();
+        private readonly IList<IYamlEntity> internalList = new List<IYamlEntity>();
 
-        public YamlSequence(IEnumerable<IYamlSequenceItem> items)
+        public YamlSequence(IEnumerable<IYamlEntity> items)
         {
             foreach (var item in items)
             {
@@ -15,12 +15,12 @@ namespace YaYAML
             }
         }
 
-        public IEnumerator<IYamlSequenceItem> GetEnumerator()
+        public IEnumerator<IYamlEntity> GetEnumerator()
         {
             return internalList.GetEnumerator();
         }
 
-        public void Add(IYamlSequenceItem item)
+        public void Add(IYamlEntity item)
         {
             internalList.Add(item);
         }
@@ -30,17 +30,17 @@ namespace YaYAML
             internalList.Clear();
         }
 
-        public bool Contains(IYamlSequenceItem item)
+        public bool Contains(IYamlEntity item)
         {
             return internalList.Contains(item);
         }
 
-        public void CopyTo(IYamlSequenceItem[] array, int arrayIndex)
+        public void CopyTo(IYamlEntity[] array, int arrayIndex)
         {
             internalList.CopyTo(array, arrayIndex);
         }
 
-        public bool Remove(IYamlSequenceItem item)
+        public bool Remove(IYamlEntity item)
         {
             return internalList.Remove(item);
         }
@@ -55,12 +55,12 @@ namespace YaYAML
             get { return internalList.IsReadOnly; }
         }
 
-        public int IndexOf(IYamlSequenceItem item)
+        public int IndexOf(IYamlEntity item)
         {
             return internalList.IndexOf(item);
         }
 
-        public void Insert(int index, IYamlSequenceItem item)
+        public void Insert(int index, IYamlEntity item)
         {
             internalList.Insert(index, item);
         }
@@ -70,7 +70,7 @@ namespace YaYAML
             internalList.RemoveAt(index);
         }
 
-        public IYamlSequenceItem this[int index]
+        public IYamlEntity this[int index]
         {
             get { return internalList[index]; }
             set { internalList[index] = value; }

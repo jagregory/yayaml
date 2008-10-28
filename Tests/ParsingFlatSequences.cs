@@ -12,10 +12,15 @@ namespace YaYAML.Tests
         [Test]
         public void SingleItem()
         {
-            var result = Parse<YamlSequenceItem<YamlText>>(x => x.SequenceItem,
+            var result = Parse<YamlSequence>(x => x.Sequence,
                 "- Mark McGwire");
 
-            Assert.That(result.Contents.ToString(), Is.EqualTo("Mark McGwire"));
+            Assert.That(result.Count, Is.EqualTo(1));
+
+            var content = result[0] as YamlText;
+
+            Assert.That(content, Is.Not.Null);
+            Assert.That(content.ToString(), Is.EqualTo("Mark McGwire"));
         }
 
         [Test]
@@ -27,9 +32,21 @@ namespace YaYAML.Tests
                 "- Ken Griffey");
 
             Assert.That(result.Count, Is.EqualTo(3));
-            Assert.That(result[0].Contents.ToString(), Is.EqualTo("Mark McGwire"));
-            Assert.That(result[1].Contents.ToString(), Is.EqualTo("Sammy Sosa"));
-            Assert.That(result[2].Contents.ToString(), Is.EqualTo("Ken Griffey"));
+
+            var first = result[0] as YamlText;
+
+            Assert.That(first, Is.Not.Null);
+            Assert.That(first.ToString(), Is.EqualTo("Mark McGwire"));
+
+            var second = result[1] as YamlText;
+
+            Assert.That(second, Is.Not.Null);
+            Assert.That(second.ToString(), Is.EqualTo("Sammy Sosa"));
+
+            var third = result[2] as YamlText;
+
+            Assert.That(third, Is.Not.Null);
+            Assert.That(third.ToString(), Is.EqualTo("Ken Griffey"));
         }
     }
 }

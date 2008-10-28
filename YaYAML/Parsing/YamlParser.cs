@@ -96,6 +96,10 @@ namespace YaYAML.Parsing
                 delegate(OMetaStream<char> inputStream2, out OMetaList<HostExpression> result2, out OMetaStream <char> modifiedStream2)
                 {
                     modifiedStream2 = inputStream2;
+                    if(!MetaRules.Apply(Spaces, modifiedStream2, out result2, out modifiedStream2))
+                    {
+                        return MetaRules.Fail(out result2, out modifiedStream2);
+                    }
                     if(!MetaRules.Many1(
                         delegate(OMetaStream<char> inputStream3, out OMetaList<HostExpression> result3, out OMetaStream <char> modifiedStream3)
                         {
@@ -123,6 +127,20 @@ namespace YaYAML.Parsing
                                         {
                                             modifiedStream5 = inputStream5;
                                             if(!MetaRules.Apply(NewLine, modifiedStream5, out result5, out modifiedStream5))
+                                            {
+                                                return MetaRules.Fail(out result5, out modifiedStream5);
+                                            }
+                                            return MetaRules.Success();
+                                        }
+                                    , modifiedStream4, out result4, out modifiedStream4))
+                                    {
+                                        return MetaRules.Fail(out result4, out modifiedStream4);
+                                    }
+                                    if(!MetaRules.Not(
+                                        delegate(OMetaStream<char> inputStream5, out OMetaList<HostExpression> result5, out OMetaStream <char> modifiedStream5)
+                                        {
+                                            modifiedStream5 = inputStream5;
+                                            if(!MetaRules.Apply(SequenceItemID, modifiedStream5, out result5, out modifiedStream5))
                                             {
                                                 return MetaRules.Fail(out result5, out modifiedStream5);
                                             }
@@ -257,7 +275,7 @@ namespace YaYAML.Parsing
                         return MetaRules.Fail(out result2, out modifiedStream2);
                     }
                     items = result2;
-                    result2 = ( new YamlSequence(items.ToIEnumerable<IYamlSequenceItem>()) ).AsHostExpressionList();
+                    result2 = ( new YamlSequence(items.ToIEnumerable<IYamlEntity>()) ).AsHostExpressionList();
                     return MetaRules.Success();
                 }, modifiedStream, out result, out modifiedStream))
             {
@@ -265,9 +283,8 @@ namespace YaYAML.Parsing
             }
             return MetaRules.Success();
         }
-        public virtual bool SequenceItem(OMetaStream<char> inputStream, out OMetaList<HostExpression> result, out OMetaStream <char> modifiedStream)
+        public virtual bool SequenceItemID(OMetaStream<char> inputStream, out OMetaList<HostExpression> result, out OMetaStream <char> modifiedStream)
         {
-            OMetaList<HostExpression> text = null;
             modifiedStream = inputStream;
             if(!MetaRules.Apply(
                 delegate(OMetaStream<char> inputStream2, out OMetaList<HostExpression> result2, out OMetaStream <char> modifiedStream2)
@@ -281,18 +298,76 @@ namespace YaYAML.Parsing
                     {
                         return MetaRules.Fail(out result2, out modifiedStream2);
                     }
-                    if(!MetaRules.Apply(Text, modifiedStream2, out result2, out modifiedStream2))
-                    {
-                        return MetaRules.Fail(out result2, out modifiedStream2);
-                    }
-                    text = result2;
-                    if(!MetaRules.Apply(OptNewLine, modifiedStream2, out result2, out modifiedStream2))
-                    {
-                        return MetaRules.Fail(out result2, out modifiedStream2);
-                    }
-                    result2 = ( new YamlSequenceItem<YamlText>(new YamlText(text.As<string>())) ).AsHostExpressionList();
                     return MetaRules.Success();
                 }, modifiedStream, out result, out modifiedStream))
+            {
+                return MetaRules.Fail(out result, out modifiedStream);
+            }
+            return MetaRules.Success();
+        }
+        public virtual bool SequenceItem(OMetaStream<char> inputStream, out OMetaList<HostExpression> result, out OMetaStream <char> modifiedStream)
+        {
+            OMetaList<HostExpression> map = null;
+            OMetaList<HostExpression> text = null;
+            modifiedStream = inputStream;
+            if(!MetaRules.Or(modifiedStream, out result, out modifiedStream,
+            delegate(OMetaStream<char> inputStream2, out OMetaList<HostExpression> result2, out OMetaStream <char> modifiedStream2)
+            {
+                modifiedStream2 = inputStream2;
+                if(!MetaRules.Apply(
+                    delegate(OMetaStream<char> inputStream3, out OMetaList<HostExpression> result3, out OMetaStream <char> modifiedStream3)
+                    {
+                        modifiedStream3 = inputStream3;
+                        if(!MetaRules.Apply(SequenceItemID, modifiedStream3, out result3, out modifiedStream3))
+                        {
+                            return MetaRules.Fail(out result3, out modifiedStream3);
+                        }
+                        if(!MetaRules.Apply(Mapping, modifiedStream3, out result3, out modifiedStream3))
+                        {
+                            return MetaRules.Fail(out result3, out modifiedStream3);
+                        }
+                        map = result3;
+                        if(!MetaRules.Apply(OptNewLine, modifiedStream3, out result3, out modifiedStream3))
+                        {
+                            return MetaRules.Fail(out result3, out modifiedStream3);
+                        }
+                        result3 = ( map.As<YamlMapping>() ).AsHostExpressionList();
+                        return MetaRules.Success();
+                    }, modifiedStream2, out result2, out modifiedStream2))
+                {
+                    return MetaRules.Fail(out result2, out modifiedStream2);
+                }
+                return MetaRules.Success();
+            }
+            ,delegate(OMetaStream<char> inputStream2, out OMetaList<HostExpression> result2, out OMetaStream <char> modifiedStream2)
+            {
+                modifiedStream2 = inputStream2;
+                if(!MetaRules.Apply(
+                    delegate(OMetaStream<char> inputStream3, out OMetaList<HostExpression> result3, out OMetaStream <char> modifiedStream3)
+                    {
+                        modifiedStream3 = inputStream3;
+                        if(!MetaRules.Apply(SequenceItemID, modifiedStream3, out result3, out modifiedStream3))
+                        {
+                            return MetaRules.Fail(out result3, out modifiedStream3);
+                        }
+                        if(!MetaRules.Apply(Text, modifiedStream3, out result3, out modifiedStream3))
+                        {
+                            return MetaRules.Fail(out result3, out modifiedStream3);
+                        }
+                        text = result3;
+                        if(!MetaRules.Apply(OptNewLine, modifiedStream3, out result3, out modifiedStream3))
+                        {
+                            return MetaRules.Fail(out result3, out modifiedStream3);
+                        }
+                        result3 = ( new YamlText(text.As<string>()) ).AsHostExpressionList();
+                        return MetaRules.Success();
+                    }, modifiedStream2, out result2, out modifiedStream2))
+                {
+                    return MetaRules.Fail(out result2, out modifiedStream2);
+                }
+                return MetaRules.Success();
+            }
+            ))
             {
                 return MetaRules.Fail(out result, out modifiedStream);
             }
