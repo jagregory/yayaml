@@ -178,10 +178,10 @@ namespace YaYAML.Parsing
             }
             return MetaRules.Success();
         }
-        public virtual bool MappingPair(OMetaStream<char> inputStream, out OMetaList<HostExpression> result, out OMetaStream <char> modifiedStream)
+        public virtual bool MappingValue(OMetaStream<char> inputStream, out OMetaList<HostExpression> result, out OMetaStream <char> modifiedStream)
         {
-            OMetaList<HostExpression> key = null;
-            OMetaList<HostExpression> value = null;
+            OMetaList<HostExpression> s = null;
+            OMetaList<HostExpression> t = null;
             modifiedStream = inputStream;
             if(!MetaRules.Or(modifiedStream, out result, out modifiedStream,
             delegate(OMetaStream<char> inputStream2, out OMetaList<HostExpression> result2, out OMetaStream <char> modifiedStream2)
@@ -191,21 +191,16 @@ namespace YaYAML.Parsing
                     delegate(OMetaStream<char> inputStream3, out OMetaList<HostExpression> result3, out OMetaStream <char> modifiedStream3)
                     {
                         modifiedStream3 = inputStream3;
-                        if(!MetaRules.Apply(MappingKey, modifiedStream3, out result3, out modifiedStream3))
-                        {
-                            return MetaRules.Fail(out result3, out modifiedStream3);
-                        }
-                        key = result3;
                         if(!MetaRules.Apply(NewLine, modifiedStream3, out result3, out modifiedStream3))
                         {
                             return MetaRules.Fail(out result3, out modifiedStream3);
                         }
-                        if(!MetaRules.Apply(MultilineText, modifiedStream3, out result3, out modifiedStream3))
+                        if(!MetaRules.Apply(Sequence, modifiedStream3, out result3, out modifiedStream3))
                         {
                             return MetaRules.Fail(out result3, out modifiedStream3);
                         }
-                        value = result3;
-                        result3 = ( new YamlMappingPair(key.As<string>(), value.As<string>()) ).AsHostExpressionList();
+                        s = result3;
+                        result3 = ( s.As<YamlSequence>() ).AsHostExpressionList();
                         return MetaRules.Success();
                     }, modifiedStream2, out result2, out modifiedStream2))
                 {
@@ -220,11 +215,30 @@ namespace YaYAML.Parsing
                     delegate(OMetaStream<char> inputStream3, out OMetaList<HostExpression> result3, out OMetaStream <char> modifiedStream3)
                     {
                         modifiedStream3 = inputStream3;
-                        if(!MetaRules.Apply(MappingKey, modifiedStream3, out result3, out modifiedStream3))
+                        if(!MetaRules.Apply(NewLine, modifiedStream3, out result3, out modifiedStream3))
                         {
                             return MetaRules.Fail(out result3, out modifiedStream3);
                         }
-                        key = result3;
+                        if(!MetaRules.Apply(MultilineText, modifiedStream3, out result3, out modifiedStream3))
+                        {
+                            return MetaRules.Fail(out result3, out modifiedStream3);
+                        }
+                        t = result3;
+                        result3 = ( new YamlText(t.As<string>()) ).AsHostExpressionList();
+                        return MetaRules.Success();
+                    }, modifiedStream2, out result2, out modifiedStream2))
+                {
+                    return MetaRules.Fail(out result2, out modifiedStream2);
+                }
+                return MetaRules.Success();
+            }
+            ,delegate(OMetaStream<char> inputStream2, out OMetaList<HostExpression> result2, out OMetaStream <char> modifiedStream2)
+            {
+                modifiedStream2 = inputStream2;
+                if(!MetaRules.Apply(
+                    delegate(OMetaStream<char> inputStream3, out OMetaList<HostExpression> result3, out OMetaStream <char> modifiedStream3)
+                    {
+                        modifiedStream3 = inputStream3;
                         if(!MetaRules.Apply(Spaces, modifiedStream3, out result3, out modifiedStream3))
                         {
                             return MetaRules.Fail(out result3, out modifiedStream3);
@@ -233,12 +247,12 @@ namespace YaYAML.Parsing
                         {
                             return MetaRules.Fail(out result3, out modifiedStream3);
                         }
-                        value = result3;
+                        t = result3;
                         if(!MetaRules.Apply(OptNewLine, modifiedStream3, out result3, out modifiedStream3))
                         {
                             return MetaRules.Fail(out result3, out modifiedStream3);
                         }
-                        result3 = ( new YamlMappingPair(key.As<string>(), value.As<string>()) ).AsHostExpressionList();
+                        result3 = ( new YamlText(t.As<string>()) ).AsHostExpressionList();
                         return MetaRules.Success();
                     }, modifiedStream2, out result2, out modifiedStream2))
                 {
@@ -247,6 +261,33 @@ namespace YaYAML.Parsing
                 return MetaRules.Success();
             }
             ))
+            {
+                return MetaRules.Fail(out result, out modifiedStream);
+            }
+            return MetaRules.Success();
+        }
+        public virtual bool MappingPair(OMetaStream<char> inputStream, out OMetaList<HostExpression> result, out OMetaStream <char> modifiedStream)
+        {
+            OMetaList<HostExpression> key = null;
+            OMetaList<HostExpression> value = null;
+            modifiedStream = inputStream;
+            if(!MetaRules.Apply(
+                delegate(OMetaStream<char> inputStream2, out OMetaList<HostExpression> result2, out OMetaStream <char> modifiedStream2)
+                {
+                    modifiedStream2 = inputStream2;
+                    if(!MetaRules.Apply(MappingKey, modifiedStream2, out result2, out modifiedStream2))
+                    {
+                        return MetaRules.Fail(out result2, out modifiedStream2);
+                    }
+                    key = result2;
+                    if(!MetaRules.Apply(MappingValue, modifiedStream2, out result2, out modifiedStream2))
+                    {
+                        return MetaRules.Fail(out result2, out modifiedStream2);
+                    }
+                    value = result2;
+                    result2 = ( new YamlMappingPair(key.As<string>(), value.As<IYamlEntity>()) ).AsHostExpressionList();
+                    return MetaRules.Success();
+                }, modifiedStream, out result, out modifiedStream))
             {
                 return MetaRules.Fail(out result, out modifiedStream);
             }
@@ -290,6 +331,10 @@ namespace YaYAML.Parsing
                 delegate(OMetaStream<char> inputStream2, out OMetaList<HostExpression> result2, out OMetaStream <char> modifiedStream2)
                 {
                     modifiedStream2 = inputStream2;
+                    if(!MetaRules.Apply(Spaces, modifiedStream2, out result2, out modifiedStream2))
+                    {
+                        return MetaRules.Fail(out result2, out modifiedStream2);
+                    }
                     if(!MetaRules.ApplyWithArgs(Exactly, modifiedStream2, out result2, out modifiedStream2, ("-").AsHostExpressionList()))
                     {
                         return MetaRules.Fail(out result2, out modifiedStream2);

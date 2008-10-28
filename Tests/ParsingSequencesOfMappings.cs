@@ -17,7 +17,7 @@ namespace YaYAML.Tests
 
             Assert.That(map, Is.Not.Null);
             Assert.That(map.ContainsKey("name"), Is.True);
-            Assert.That(map["name"], Is.EqualTo("first"));
+            Assert.That(map["name"].ToString(), Is.EqualTo("first"));
         }
 
         [Test]
@@ -34,12 +34,12 @@ namespace YaYAML.Tests
             Assert.That(map, Is.Not.Null);
             Assert.That(map.ContainsKey("name"), Is.True);
             Assert.That(map.ContainsKey("value"), Is.True);
-            Assert.That(map["name"], Is.EqualTo("first"));
-            Assert.That(map["value"], Is.EqualTo("test"));
+            Assert.That(map["name"].ToString(), Is.EqualTo("first"));
+            Assert.That(map["value"].ToString(), Is.EqualTo("test"));
         }
 
         [Test]
-        public void MultipeListItemsWithSingleKeyValues()
+        public void MultipleListItemsWithSingleKeyValues()
         {
             var result = Parse<YamlSequence>(x => x.Sequence,
                 "- name: first",
@@ -51,23 +51,23 @@ namespace YaYAML.Tests
 
             Assert.That(first, Is.Not.Null);
             Assert.That(first.ContainsKey("name"), Is.True);
-            Assert.That(first["name"], Is.EqualTo("first"));
+            Assert.That(first["name"].ToString(), Is.EqualTo("first"));
 
             var second = result[1] as YamlMapping;
 
             Assert.That(second, Is.Not.Null);
             Assert.That(second.ContainsKey("name"), Is.True);
-            Assert.That(second["name"], Is.EqualTo("second"));
+            Assert.That(second["name"].ToString(), Is.EqualTo("second"));
         }
 
         [Test]
-        public void MultipeListItemsWithMultipleKeyValues()
+        public void MultipleListItemsWithMultipleKeyValues()
         {
             var result = Parse<YamlSequence>(x => x.Sequence,
-                                             "- name: first",
-                                             "  value: test",
-                                             "- name: second",
-                                             "  value: test2");
+                "- name: first",
+                "  value: test",
+                "- name: second",
+                "  value: test2");
 
             Assert.That(result.Count, Is.EqualTo(2));
 
@@ -76,15 +76,15 @@ namespace YaYAML.Tests
             Assert.That(first, Is.Not.Null);
             Assert.That(first.ContainsKey("name"), Is.True);
             Assert.That(first.ContainsKey("value"), Is.True);
-            Assert.That(first["name"], Is.EqualTo("first"));
-            Assert.That(first["value"], Is.EqualTo("test"));
+            Assert.That(first["name"].ToString(), Is.EqualTo("first"));
+            Assert.That(first["value"].ToString(), Is.EqualTo("test"));
 
             var second = result[1] as YamlMapping;
 
             Assert.That(second, Is.Not.Null);
             Assert.That(second.ContainsKey("name"), Is.True);
             Assert.That(second.ContainsKey("value"), Is.True);
-            Assert.That(second["value"], Is.EqualTo("test2"));
+            Assert.That(second["value"].ToString(), Is.EqualTo("test2"));
         }
     }
 }

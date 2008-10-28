@@ -7,11 +7,13 @@ ometa YaYAML.Parsing.YamlParser : Parser {
 
   Mapping = MappingPair+:pairs -> { new YamlMapping(pairs.ToIEnumerable<YamlMappingPair>()) },
   MappingKey = Spaces (~':' ~NewLine ~SequenceItemID Character)+:key ':' -> { key },
-  MappingPair = MappingKey:key NewLine MultilineText:value -> { new YamlMappingPair(key.As<string>(), value.As<string>()) }
-              | MappingKey:key Spaces Text:value OptNewLine -> { new YamlMappingPair(key.As<string>(), value.As<string>()) },
+  MappingValue = NewLine Sequence:s -> { s.As<YamlSequence>() }
+               | NewLine MultilineText:t -> { new YamlText(t.As<string>()) }
+               | Spaces Text:t OptNewLine -> { new YamlText(t.As<string>()) },
+  MappingPair = MappingKey:key MappingValue:value -> { new YamlMappingPair(key.As<string>(), value.As<IYamlEntity>()) },
 
   Sequence = SequenceItem+:items -> { new YamlSequence(items.ToIEnumerable<IYamlEntity>()) },
-  SequenceItemID = '-' Space,
+  SequenceItemID = Spaces '-' Space,
   SequenceItem = SequenceItemID Mapping:map OptNewLine -> { map.As<YamlMapping>() }
                | SequenceItemID Text:text OptNewLine -> { new YamlText(text.As<string>()) },
   

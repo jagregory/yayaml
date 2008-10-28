@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace YaYAML
 {
-    public class YamlMapping : IDictionary<string, string>, IYamlEntity
+    public class YamlMapping : IDictionary<string, IYamlEntity>, IYamlEntity
     {
-        private readonly IDictionary<string, string> internalDictionary = new Dictionary<string, string>();
+        private readonly IDictionary<string, IYamlEntity> internalDictionary = new Dictionary<string, IYamlEntity>();
 
         public YamlMapping(IEnumerable<YamlMappingPair> pairs)
         {
@@ -15,12 +15,12 @@ namespace YaYAML
             }
         }
 
-        public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
+        public IEnumerator<KeyValuePair<string, IYamlEntity>> GetEnumerator()
         {
             return internalDictionary.GetEnumerator();
         }
 
-        public void Add(KeyValuePair<string, string> item)
+        public void Add(KeyValuePair<string, IYamlEntity> item)
         {
             internalDictionary.Add(item);
         }
@@ -35,17 +35,17 @@ namespace YaYAML
             internalDictionary.Clear();
         }
 
-        public bool Contains(KeyValuePair<string, string> item)
+        public bool Contains(KeyValuePair<string, IYamlEntity> item)
         {
             return internalDictionary.Contains(item);
         }
 
-        public void CopyTo(KeyValuePair<string, string>[] array, int arrayIndex)
+        public void CopyTo(KeyValuePair<string, IYamlEntity>[] array, int arrayIndex)
         {
             internalDictionary.CopyTo(array, arrayIndex);
         }
 
-        public bool Remove(KeyValuePair<string, string> item)
+        public bool Remove(KeyValuePair<string, IYamlEntity> item)
         {
             return internalDictionary.Remove(item);
         }
@@ -65,7 +65,7 @@ namespace YaYAML
             return internalDictionary.ContainsKey(key);
         }
 
-        public void Add(string key, string value)
+        public void Add(string key, IYamlEntity value)
         {
             internalDictionary.Add(key, value);
         }
@@ -75,12 +75,12 @@ namespace YaYAML
             return internalDictionary.Remove(key);
         }
 
-        public bool TryGetValue(string key, out string value)
+        public bool TryGetValue(string key, out IYamlEntity value)
         {
             return internalDictionary.TryGetValue(key, out value);
         }
 
-        public string this[string key]
+        public IYamlEntity this[string key]
         {
             get { return internalDictionary[key]; }
             set { internalDictionary[key] = value; }
@@ -91,7 +91,7 @@ namespace YaYAML
             get { return internalDictionary.Keys; }
         }
 
-        public ICollection<string> Values
+        public ICollection<IYamlEntity> Values
         {
             get { return internalDictionary.Values; }
         }

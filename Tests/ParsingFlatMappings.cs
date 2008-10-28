@@ -12,7 +12,7 @@ namespace YaYAML.Tests
                 "hr: 65");
 
             Assert.That(result.Key, Is.EqualTo("hr"));
-            Assert.That(result.Value, Is.EqualTo("65"));
+            Assert.That(result.Value.ToString(), Is.EqualTo("65"));
         }
 
         [Test]
@@ -22,7 +22,7 @@ namespace YaYAML.Tests
                 "hr:    65");
 
             Assert.That(result.Key, Is.EqualTo("hr"));
-            Assert.That(result.Value, Is.EqualTo("65"));
+            Assert.That(result.Value.ToString(), Is.EqualTo("65"));
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace YaYAML.Tests
                 "  Unknown variable \"bar\"");
 
             Assert.That(result.Key, Is.EqualTo("Fatal"));
-            Assert.That(result.Value, Is.EqualTo("Unknown variable \"bar\""));
+            Assert.That(result.Value.ToString(), Is.EqualTo("Unknown variable \"bar\""));
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace YaYAML.Tests
                 "  message.");
 
             Assert.That(result.Key, Is.EqualTo("Warning"));
-            Assert.That(result.Value, Is.EqualTo("A slightly different error message."));
+            Assert.That(result.Value.ToString(), Is.EqualTo("A slightly different error message."));
         }
 
         [Test]
@@ -59,9 +59,9 @@ namespace YaYAML.Tests
             Assert.That(result.ContainsKey("hr"), Is.True);
             Assert.That(result.ContainsKey("avg"), Is.True);
             Assert.That(result.ContainsKey("rbi"), Is.True);
-            Assert.That(result["hr"], Is.EqualTo("65"));
-            Assert.That(result["avg"], Is.EqualTo("0.278"));
-            Assert.That(result["rbi"], Is.EqualTo("147"));
+            Assert.That(result["hr"].ToString(), Is.EqualTo("65"));
+            Assert.That(result["avg"].ToString(), Is.EqualTo("0.278"));
+            Assert.That(result["rbi"].ToString(), Is.EqualTo("147"));
         }
 
         [Test]
@@ -82,11 +82,11 @@ namespace YaYAML.Tests
             Assert.That(result.ContainsKey("three"), Is.True);
             Assert.That(result.ContainsKey("four"), Is.True);
             Assert.That(result.ContainsKey("fifth"), Is.True);
-            Assert.That(result["one"], Is.EqualTo("1"));
-            Assert.That(result["two"], Is.EqualTo("2"));
-            Assert.That(result["three"], Is.EqualTo("3"));
-            Assert.That(result["four"], Is.EqualTo("this is the fourth"));
-            Assert.That(result["fifth"], Is.EqualTo("5"));
+            Assert.That(result["one"].ToString(), Is.EqualTo("1"));
+            Assert.That(result["two"].ToString(), Is.EqualTo("2"));
+            Assert.That(result["three"].ToString(), Is.EqualTo("3"));
+            Assert.That(result["four"].ToString(), Is.EqualTo("this is the fourth"));
+            Assert.That(result["fifth"].ToString(), Is.EqualTo("5"));
         }
     }
 }

@@ -57,6 +57,7 @@
     <Compile Include="ParsingFlatMappings.cs" />
     <Compile Include="ParsingFlatSequences.cs" />
     <Compile Include="ParsingFullDocuments.cs" />
+    <Compile Include="ParsingMappingsWithSequencesAsValues.cs" />
     <Compile Include="ParsingSequencesOfMappings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="YamlParserTests.cs" />
