@@ -7,7 +7,7 @@ namespace YaYAML.Utils.RebuildParser
     {
         public void RebuildParser()
         {
-            var contents = File.ReadAllText(@"..\..\..\YaYAML\Parser\YamlParser.ometacs");
+            var contents = File.ReadAllText(@"..\..\..\YaYAML\Parsing\YamlParser.ometacs");
             var result = Grammars.ParseGrammarThenOptimizeThenTranslate
                 <OMetaParser, OMetaOptimizer, OMetaTranslator>
                 (contents,
@@ -15,7 +15,7 @@ namespace YaYAML.Utils.RebuildParser
                  o => o.OptimizeGrammar,
                  t => t.Trans);
 
-            File.WriteAllText(@"..\..\..\YaYAML\Parser\YamlParser.cs", result);
+            File.WriteAllText(@"..\..\..\YaYAML\Parsing\YamlParser.cs", result);
         }
     }
 }

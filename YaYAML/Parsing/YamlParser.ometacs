@@ -1,0 +1,4 @@
+using OMetaSharp;
+
+ometa YaYAML.Parsing.YamlParser : Parser {
+}
