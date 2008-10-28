@@ -54,14 +54,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractParserTestFixture.cs" />
+    <Compile Include="ParsingFlatMappings.cs" />
     <Compile Include="ParsingFlatSequences.cs" />
+    <Compile Include="ParsingFullDocuments.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="YamlParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\YaYAML\YaYAML.csproj">
       <Project>{E0CCD402-E15D-4467-A494-6AEBBB7C9C5B}</Project>
       <Name>YaYAML</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Sample.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,6 @@
 namespace YaYAML
 {
-    public class YamlSequenceItem
+    public class YamlSequenceItem : IYamlEntity
     {
         public YamlSequenceItem(string contents)
         {

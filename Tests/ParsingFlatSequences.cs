@@ -21,7 +21,7 @@ namespace YaYAML.Tests
         [Test]
         public void MultipleItems()
         {
-            var result = ParseList<YamlSequenceItem>(x => x.Sequence,
+            var result = Parse<YamlSequence>(x => x.Sequence,
                 "- Mark McGwire",
                 "- Sammy Sosa",
                 "- Ken Griffey");

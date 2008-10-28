@@ -2,9 +2,22 @@ using OMetaSharp;
 using YaYAML;
 
 ometa YaYAML.Parsing.YamlParser : Parser {
-  Sequence = SequenceItem+:items -> { items },
-  SequenceItem = '-' Space Text:text (NewLine | Empty) -> { new YamlSequenceItem(text.As<string>()) },
+  Document = Mapping:m ->  { new YamlDocument(m.As<YamlMapping>()) }
+           | Sequence:s -> { new YamlDocument(s.As<YamlSequence>()) },
+
+  Mapping = MappingPair+:pairs -> { new YamlMapping(pairs.ToIEnumerable<YamlMappingPair>()) },
+  MappingKey = (~':' ~NewLine Character)+:key ':' -> { key },
+  MappingPair = MappingKey:key NewLine MultilineText:value -> { new YamlMappingPair(key.As<string>(), value.As<string>()) }
+              | MappingKey:key Spaces Text:value OptNewLine -> { new YamlMappingPair(key.As<string>(), value.As<string>()) },
+
+  Sequence = SequenceItem+:items -> { new YamlSequence(items.ToIEnumerable<YamlSequenceItem>()) },
+  SequenceItem = '-' Space Text:text OptNewLine -> { new YamlSequenceItem(text.As<string>()) },
+  
+  MultilineText = MultilineTextLine+:lines -> { lines.Join(" ") },
+  MultilineTextLine = Space+:s Text:text<string> OptNewLine -> { text },
+  
   Text = (~NewLine Character)+:t -> { t.As<string>() },
   NewLine = '\r' '\n'
-          | '\n'
+          | '\n',
+  OptNewLine = (NewLine | Empty)
 }
