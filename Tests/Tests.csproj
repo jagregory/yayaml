@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E0CCD402-E15D-4467-A494-6AEBBB7C9C5B}</ProjectGuid>
+    <ProjectGuid>{79FA6840-CA51-4E37-B23C-626439A8CBEC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YaYAML</RootNamespace>
-    <AssemblyName>YaYAML</AssemblyName>
+    <RootNamespace>YaYAML.Tests</RootNamespace>
+    <AssemblyName>YaYAML.Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,13 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework, Version=2.5.0.8258, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\libs\nunit\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="OMetaSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libs\OMeta\OMetaSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="OMetaSharp.OMetaCS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\libs\OMeta\OMetaSharp.OMetaCS.dll</HintPath>
+      <HintPath>..\..\OMetaSharp\Runtime\OMetaSharp\bin\Debug\OMetaSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -53,12 +53,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Parsing\YamlParser.cs" />
-    <Compile Include="YamlSequenceItem.cs" />
+    <Compile Include="AbstractParserTestFixture.cs" />
+    <Compile Include="ParsingFlatSequences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Parsing\YamlParser.ometacs" />
+    <ProjectReference Include="..\YaYAML\YaYAML.csproj">
+      <Project>{E0CCD402-E15D-4467-A494-6AEBBB7C9C5B}</Project>
+      <Name>YaYAML</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
