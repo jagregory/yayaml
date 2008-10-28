@@ -1,0 +1,11 @@
+h1. YaYAML
+
+Yet another YAML parser for .Net
+
+h2. What is YaYAML?
+
+A YAML parser for .Net. It's currently very under-featured, and is really just handles parsing of hashes and lists.
+
+h3. Why have you bothered with this?
+
+I needed a simple file format for hash data, and I didn't want to use XML. I could've implemented my own simple format, but I thought YAML would work nicely.
