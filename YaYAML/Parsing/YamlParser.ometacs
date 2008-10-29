@@ -12,10 +12,10 @@ ometa YaYAML.Parsing.YamlParser : Parser {
                | Spaces Text:t OptNewLine -> { new YamlText(t.As<string>()) },
   MappingPair = MappingKey:key MappingValue:value -> { new YamlMappingPair(key.As<string>(), value.As<IYamlEntity>()) },
 
-  Sequence = SequenceItem+:items -> { new YamlSequence(items.ToIEnumerable<IYamlEntity>()) },
-  SequenceItemID = Spaces '-' Space,
-  SequenceItem = SequenceItemID Mapping:map OptNewLine -> { map.As<YamlMapping>() }
-               | SequenceItemID Text:text OptNewLine -> { new YamlText(text.As<string>()) },
+  Sequence = &SpaceCount:sp SequenceItem(sp)+:items -> { new YamlSequence(items.ToIEnumerable<IYamlEntity>()) },
+  SequenceItemID = '-' Space,
+  SequenceItem :indent = Indent(indent) SequenceItemID Mapping:map OptNewLine -> { map.As<YamlMapping>() }
+                       | Indent(indent) SequenceItemID Text:text OptNewLine -> { new YamlText(text.As<string>()) },
   
   MultilineText = MultilineTextLine+:lines -> { lines.Join(" ") },
   MultilineTextLine = Space+:s Text:text<string> OptNewLine -> { text },
@@ -23,5 +23,9 @@ ometa YaYAML.Parsing.YamlParser : Parser {
   Text = (~NewLine Character)+:t -> { t.As<string>() },
   NewLine = '\r' '\n'
           | '\n',
-  OptNewLine = (NewLine | Empty)
+  OptNewLine = (NewLine | Empty),
+  
+  SpaceCount = Space+:s<string> -> { s.Length }
+             | Empty -> { 0 },
+  Indent :depth = SpaceCount:initialIndent ?( initialIndent.As<int>() >= int.Parse(depth.As<string>()) )
 }
