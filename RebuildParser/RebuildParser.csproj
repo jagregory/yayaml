@@ -35,11 +35,11 @@
   <ItemGroup>
     <Reference Include="OMetaSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\OMetaSharp\Runtime\OMetaSharp\bin\Debug\OMetaSharp.dll</HintPath>
+      <HintPath>..\libs\OMeta\OMetaSharp.dll</HintPath>
     </Reference>
     <Reference Include="OMetaSharp.OMetaCS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\OMetaSharp\HostLanguages\OMetaCS\OMetaCS\bin\Debug\OMetaSharp.OMetaCS.dll</HintPath>
+      <HintPath>..\libs\OMeta\OMetaSharp.OMetaCS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
