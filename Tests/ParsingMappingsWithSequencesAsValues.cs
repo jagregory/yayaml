@@ -8,13 +8,16 @@ namespace YaYAML.Tests
         [Test]
         public void SingleKeyWithSingleListItemAsValue()
         {
-            var result = Parse<YamlMapping>(x => x.Mapping,
+            var result = Parse<YamlDocument>(x => x.Document,
                 "key:",
                 "  - value");
 
-            Assert.That(result.ContainsKey("key"), Is.True);
+            var map = result.Items[0] as YamlMapping;
 
-            var value = result["key"] as YamlSequence;
+            Assert.That(map, Is.Not.Null);
+            Assert.That(map.ContainsKey("key"), Is.True);
+
+            var value = map["key"] as YamlSequence;
 
             Assert.That(value, Is.Not.Null);
             Assert.That(value.Count, Is.EqualTo(1));
@@ -24,14 +27,17 @@ namespace YaYAML.Tests
         [Test]
         public void SingleKeyWithMultipleListItemsAsValue()
         {
-            var result = Parse<YamlMapping>(x => x.Mapping,
+            var result = Parse<YamlDocument>(x => x.Document,
                 "key:",
                 "  - value",
                 "  - another value");
 
-            Assert.That(result.ContainsKey("key"), Is.True);
+            var map = result.Items[0] as YamlMapping;
 
-            var value = result["key"] as YamlSequence;
+            Assert.That(map, Is.Not.Null);
+            Assert.That(map.ContainsKey("key"), Is.True);
+
+            var value = map["key"] as YamlSequence;
 
             Assert.That(value, Is.Not.Null);
             Assert.That(value.Count, Is.EqualTo(2));
@@ -42,23 +48,26 @@ namespace YaYAML.Tests
         [Test]
         public void MultipleKeysWithSingleListItemsAsValues()
         {
-            var result = Parse<YamlMapping>(x => x.Mapping,
+            var result = Parse<YamlDocument>(x => x.Document,
                 "key:",
                 "  - value",
                 "key2:",
                 "  - value2");
 
-            Assert.That(result.ContainsKey("key"), Is.True);
+            var map = result.Items[0] as YamlMapping;
 
-            var first = result["key"] as YamlSequence;
+            Assert.That(map, Is.Not.Null);
+            Assert.That(map.ContainsKey("key"), Is.True);
+
+            var first = map["key"] as YamlSequence;
 
             Assert.That(first, Is.Not.Null);
             Assert.That(first.Count, Is.EqualTo(1));
             Assert.That(first[0].ToString(), Is.EqualTo("value"));
 
-            Assert.That(result.ContainsKey("key2"), Is.True);
+            Assert.That(map.ContainsKey("key2"), Is.True);
 
-            var second = result["key2"] as YamlSequence;
+            var second = map["key2"] as YamlSequence;
 
             Assert.That(second, Is.Not.Null);
             Assert.That(second.Count, Is.EqualTo(1));
@@ -68,7 +77,7 @@ namespace YaYAML.Tests
         [Test]
         public void MultipleKeysWithMultipleListItemsAsValues()
         {
-            var result = Parse<YamlMapping>(x => x.Mapping,
+            var result = Parse<YamlDocument>(x => x.Document,
                  "key:",
                  "  - value",
                  "  - value2",
@@ -76,18 +85,21 @@ namespace YaYAML.Tests
                  "  - value3",
                  "  - value4");
 
-            Assert.That(result.ContainsKey("key"), Is.True);
+            var map = result.Items[0] as YamlMapping;
 
-            var first = result["key"] as YamlSequence;
+            Assert.That(map, Is.Not.Null);
+            Assert.That(map.ContainsKey("key"), Is.True);
+
+            var first = map["key"] as YamlSequence;
 
             Assert.That(first, Is.Not.Null);
             Assert.That(first.Count, Is.EqualTo(2));
             Assert.That(first[0].ToString(), Is.EqualTo("value"));
             Assert.That(first[1].ToString(), Is.EqualTo("value2"));
 
-            Assert.That(result.ContainsKey("key2"), Is.True);
+            Assert.That(map.ContainsKey("key2"), Is.True);
 
-            var second = result["key2"] as YamlSequence;
+            var second = map["key2"] as YamlSequence;
 
             Assert.That(second, Is.Not.Null);
             Assert.That(second.Count, Is.EqualTo(2));

@@ -8,12 +8,15 @@ namespace YaYAML.Tests
         [Test]
         public void SingleListItemWithOneKeyValue()
         {
-            var result = Parse<YamlSequence>(x => x.Sequence,
+            var result = Parse<YamlDocument>(x => x.Document,
                 "- name: first");
 
-            Assert.That(result.Count, Is.EqualTo(1));
+            var seq = result.Items[0] as YamlSequence;
 
-            var map = result[0] as YamlMapping;
+            Assert.That(seq, Is.Not.Null);
+            Assert.That(seq.Count, Is.EqualTo(1));
+
+            var map = seq[0] as YamlMapping;
 
             Assert.That(map, Is.Not.Null);
             Assert.That(map.ContainsKey("name"), Is.True);
@@ -23,13 +26,16 @@ namespace YaYAML.Tests
         [Test]
         public void SingleListItemWithMultipleKeyValues()
         {
-            var result = Parse<YamlSequence>(x => x.Sequence,
+            var result = Parse<YamlDocument>(x => x.Document,
                 "- name: first",
                 "  value: test");
 
-            Assert.That(result.Count, Is.EqualTo(1));
+            var seq = result.Items[0] as YamlSequence;
 
-            var map = result[0] as YamlMapping;
+            Assert.That(seq, Is.Not.Null);
+            Assert.That(seq.Count, Is.EqualTo(1));
+
+            var map = seq[0] as YamlMapping;
 
             Assert.That(map, Is.Not.Null);
             Assert.That(map.ContainsKey("name"), Is.True);
@@ -41,19 +47,22 @@ namespace YaYAML.Tests
         [Test]
         public void MultipleListItemsWithSingleKeyValues()
         {
-            var result = Parse<YamlSequence>(x => x.Sequence,
+            var result = Parse<YamlDocument>(x => x.Document,
                 "- name: first",
                 "- name: second");
 
-            Assert.That(result.Count, Is.EqualTo(2));
+            var seq = result.Items[0] as YamlSequence;
 
-            var first = result[0] as YamlMapping;
+            Assert.That(seq, Is.Not.Null);
+            Assert.That(seq.Count, Is.EqualTo(2));
+
+            var first = seq[0] as YamlMapping;
 
             Assert.That(first, Is.Not.Null);
             Assert.That(first.ContainsKey("name"), Is.True);
             Assert.That(first["name"].ToString(), Is.EqualTo("first"));
 
-            var second = result[1] as YamlMapping;
+            var second = seq[1] as YamlMapping;
 
             Assert.That(second, Is.Not.Null);
             Assert.That(second.ContainsKey("name"), Is.True);
@@ -63,15 +72,18 @@ namespace YaYAML.Tests
         [Test]
         public void MultipleListItemsWithMultipleKeyValues()
         {
-            var result = Parse<YamlSequence>(x => x.Sequence,
+            var result = Parse<YamlDocument>(x => x.Document,
                 "- name: first",
                 "  value: test",
                 "- name: second",
                 "  value: test2");
 
-            Assert.That(result.Count, Is.EqualTo(2));
+            var seq = result.Items[0] as YamlSequence;
 
-            var first = result[0] as YamlMapping;
+            Assert.That(seq, Is.Not.Null);
+            Assert.That(seq.Count, Is.EqualTo(2));
+
+            var first = seq[0] as YamlMapping;
 
             Assert.That(first, Is.Not.Null);
             Assert.That(first.ContainsKey("name"), Is.True);
@@ -79,7 +91,7 @@ namespace YaYAML.Tests
             Assert.That(first["name"].ToString(), Is.EqualTo("first"));
             Assert.That(first["value"].ToString(), Is.EqualTo("test"));
 
-            var second = result[1] as YamlMapping;
+            var second = seq[1] as YamlMapping;
 
             Assert.That(second, Is.Not.Null);
             Assert.That(second.ContainsKey("name"), Is.True);
@@ -90,22 +102,25 @@ namespace YaYAML.Tests
         [Test]
         public void SingleListItemWithHashWithListAsValue()
         {
-            var result = Parse<YamlSequence>(x => x.Sequence,
+            var result = Parse<YamlDocument>(x => x.Document,
                 "- value:",
                 "    - one",
                 "    - two");
 
-            Assert.That(result.Count, Is.EqualTo(1));
+            var seq = result.Items[0] as YamlSequence;
 
-            var first = result[0] as YamlMapping;
+            Assert.That(seq, Is.Not.Null);
+            Assert.That(seq.Count, Is.EqualTo(1));
+
+            var first = seq[0] as YamlMapping;
 
             Assert.That(first, Is.Not.Null);
             Assert.That(first.ContainsKey("value"), Is.True);
 
-            var seq = first["value"] as YamlSequence;
+            var seq2 = first["value"] as YamlSequence;
 
-            Assert.That(seq, Is.Not.Null);
-            Assert.That(seq.Count, Is.EqualTo(2));
+            Assert.That(seq2, Is.Not.Null);
+            Assert.That(seq2.Count, Is.EqualTo(2));
         }
     }
 }

@@ -8,7 +8,7 @@ namespace YaYAML.Tests
         [Test]
         public void MultipleListItemWithHashWithListAsValue()
         {
-            var result = Parse<YamlMapping>(x => x.Mapping,
+            var result = Parse<YamlDocument>(x => x.Document,
                 "good_people:",
                 "  - name: James",
                 "    reason: always happy",
@@ -20,10 +20,13 @@ namespace YaYAML.Tests
                 "  - name: Uma",
                 "    reason: too tall");
 
-            Assert.That(result.ContainsKey("good_people"), Is.True,
+            var map = result.Items[0] as YamlMapping;
+
+            Assert.That(map, Is.Not.Null);
+            Assert.That(map.ContainsKey("good_people"), Is.True,
                 "Expected key 'good_people'");
 
-            var good_people = result["good_people"] as YamlSequence;
+            var good_people = map["good_people"] as YamlSequence;
 
             Assert.That(good_people, Is.Not.Null);
             Assert.That(good_people.Count, Is.EqualTo(2));
@@ -31,10 +34,10 @@ namespace YaYAML.Tests
             VerifyPerson(good_people[0] as YamlMapping, "James", "always happy");
             VerifyPerson(good_people[1] as YamlMapping, "Sara", "is nice");
 
-            Assert.That(result.ContainsKey("bad_people"), Is.True,
+            Assert.That(map.ContainsKey("bad_people"), Is.True,
                 "Expected key 'bad_people'");
 
-            var bad_people = result["bad_people"] as YamlSequence;
+            var bad_people = map["bad_people"] as YamlSequence;
 
             Assert.That(bad_people, Is.Not.Null);
             Assert.That(bad_people.Count, Is.EqualTo(2));

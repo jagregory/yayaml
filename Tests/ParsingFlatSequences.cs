@@ -12,12 +12,15 @@ namespace YaYAML.Tests
         [Test]
         public void SingleItem()
         {
-            var result = Parse<YamlSequence>(x => x.Sequence,
+            var result = Parse<YamlDocument>(x => x.Document,
                 "- Mark McGwire");
 
-            Assert.That(result.Count, Is.EqualTo(1));
+            var seq = result.Items[0] as YamlSequence;
 
-            var content = result[0] as YamlText;
+            Assert.That(seq, Is.Not.Null);
+            Assert.That(seq.Count, Is.EqualTo(1));
+
+            var content = seq[0] as YamlText;
 
             Assert.That(content, Is.Not.Null);
             Assert.That(content.ToString(), Is.EqualTo("Mark McGwire"));
@@ -26,24 +29,27 @@ namespace YaYAML.Tests
         [Test]
         public void MultipleItems()
         {
-            var result = Parse<YamlSequence>(x => x.Sequence,
+            var result = Parse<YamlDocument>(x => x.Document,
                 "- Mark McGwire",
                 "- Sammy Sosa",
                 "- Ken Griffey");
 
-            Assert.That(result.Count, Is.EqualTo(3));
+            var seq = result.Items[0] as YamlSequence;
 
-            var first = result[0] as YamlText;
+            Assert.That(seq, Is.Not.Null);
+            Assert.That(seq.Count, Is.EqualTo(3));
+
+            var first = seq[0] as YamlText;
 
             Assert.That(first, Is.Not.Null);
             Assert.That(first.ToString(), Is.EqualTo("Mark McGwire"));
 
-            var second = result[1] as YamlText;
+            var second = seq[1] as YamlText;
 
             Assert.That(second, Is.Not.Null);
             Assert.That(second.ToString(), Is.EqualTo("Sammy Sosa"));
 
-            var third = result[2] as YamlText;
+            var third = seq[2] as YamlText;
 
             Assert.That(third, Is.Not.Null);
             Assert.That(third.ToString(), Is.EqualTo("Ken Griffey"));

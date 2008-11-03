@@ -2,19 +2,20 @@ using OMetaSharp;
 using YaYAML;
 
 ometa YaYAML.Parsing.YamlParser : Parser {
-  Document = Mapping:m ->  { new YamlDocument(m.As<YamlMapping>()) }
-           | Sequence:s -> { new YamlDocument(s.As<YamlSequence>()) },
+  Document = Mapping(0):m ->  { new YamlDocument(m.As<YamlMapping>()) }
+           | Sequence(0):s -> { new YamlDocument(s.As<YamlSequence>()) },
 
-  Mapping = MappingPair+:pairs -> { new YamlMapping(pairs.ToIEnumerable<YamlMappingPair>()) },
-  MappingKey = Spaces (~':' ~NewLine ~SequenceItemID Character)+:key ':' -> { key },
-  MappingValue = NewLine Sequence:s -> { s.As<YamlSequence>() }
+  MappingInline :initialIndent = MappingPair(0):first MappingPair(initialIndent)*:pairs -> { new YamlMapping(first.As<YamlMappingPair>(), pairs.ToIEnumerable<YamlMappingPair>()) },
+  Mapping :initialIndent = MappingPair(initialIndent)+:pairs -> { new YamlMapping(pairs.ToIEnumerable<YamlMappingPair>()) },
+  MappingKey :initialIndent = Indent(initialIndent) (~':' ~NewLine ~SequenceItemID Character)+:key ':' -> { key },
+  MappingValue :initialIndent<int> =  &ChildIndent(initialIndent):ci NewLine Sequence(ci):s -> { s.As<YamlSequence>() }
                | NewLine MultilineText:t -> { new YamlText(t.As<string>()) }
                | Spaces Text:t OptNewLine -> { new YamlText(t.As<string>()) },
-  MappingPair = MappingKey:key MappingValue:value -> { new YamlMappingPair(key.As<string>(), value.As<IYamlEntity>()) },
+  MappingPair :initialIndent = MappingKey(initialIndent):key MappingValue(initialIndent):value -> { new YamlMappingPair(key.As<string>(), value.As<IYamlEntity>()) },
 
-  Sequence = &SpaceCount:sp SequenceItem(sp)+:items -> { new YamlSequence(items.ToIEnumerable<IYamlEntity>()) },
+  Sequence :initialIndent = SequenceItem(initialIndent)+:items -> { new YamlSequence(items.ToIEnumerable<IYamlEntity>()) },
   SequenceItemID = '-' Space,
-  SequenceItem :indent = Indent(indent) SequenceItemID Mapping:map OptNewLine -> { map.As<YamlMapping>() }
+  SequenceItem :indent = Indent(indent) &ChildIndent(indent):ci SequenceItemID MappingInline(ci):map OptNewLine -> { map.As<YamlMapping>() }
                        | Indent(indent) SequenceItemID Text:text OptNewLine -> { new YamlText(text.As<string>()) },
   
   MultilineText = MultilineTextLine+:lines -> { lines.Join(" ") },
@@ -27,5 +28,6 @@ ometa YaYAML.Parsing.YamlParser : Parser {
   
   SpaceCount = Space+:s<string> -> { s.Length }
              | Empty -> { 0 },
-  Indent :depth = SpaceCount:initialIndent ?( initialIndent.As<int>() >= int.Parse(depth.As<string>()) )
+  Indent :depth = SpaceCount:initialIndent ?( initialIndent.As<int>() >= int.Parse(depth.As<string>()) ),
+  ChildIndent :indent -> { indent.As<int>() + 2 }
 }

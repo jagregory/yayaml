@@ -7,6 +7,16 @@ namespace YaYAML
     {
         private readonly IDictionary<string, IYamlEntity> internalDictionary = new Dictionary<string, IYamlEntity>();
 
+        public YamlMapping(YamlMappingPair head, IEnumerable<YamlMappingPair> pairs)
+        {
+            Add(head);
+
+            foreach (var pair in pairs)
+            {
+                Add(pair);
+            }
+        }
+
         public YamlMapping(IEnumerable<YamlMappingPair> pairs)
         {
             foreach (var pair in pairs)
