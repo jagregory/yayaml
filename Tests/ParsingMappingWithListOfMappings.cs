@@ -46,6 +46,93 @@ namespace YaYAML.Tests
             VerifyPerson(bad_people[1] as YamlMapping, "Uma", "too tall");
         }
 
+        [Test]
+        public void ListOfHashesWithListOfHashWithMultilineValue()
+        {
+            var result = Parse<YamlDocument>(x => x.Document,
+                "good_people:",
+                "  - name: James",
+                "    extras:",
+                "      - mirror2:",
+                "          one",
+                "  - name: Sara");
+
+            var map = result.Items[0] as YamlMapping;
+
+            Assert.That(map, Is.Not.Null);
+            Assert.That(map.ContainsKey("good_people"), Is.True,
+                "Expected key 'good_people'");
+
+            var good_people = map["good_people"] as YamlSequence;
+
+            Assert.That(good_people, Is.Not.Null);
+            Assert.That(good_people.Count, Is.EqualTo(2));
+
+            var mapping = good_people[0] as YamlMapping;
+
+            Assert.That(mapping, Is.Not.Null);
+            Assert.That(mapping.ContainsKey("name"), Is.True);
+            Assert.That(mapping.ContainsKey("extras"), Is.True);
+
+            var extras = mapping["extras"] as YamlSequence;
+
+            Assert.That(extras, Is.Not.Null);
+            Assert.That(extras.Count, Is.EqualTo(1));
+
+            mapping = extras[0] as YamlMapping;
+
+            Assert.That(mapping, Is.Not.Null);
+            Assert.That(mapping.ContainsKey("mirror2"), Is.Not.Null);
+            Assert.That(mapping["mirror2"].ToString(), Is.EqualTo("one"));
+        }
+
+        [Test]
+        public void ListOfHashesWithListOfHashWithMultilineValue2()
+        {
+            var result = Parse<YamlDocument>(x => x.Document,
+                "good_people:",
+                "  - name: James",
+                "    extras:",
+                "      - mirror2:",
+                "          - one",
+                "          - two",
+                "  - name: Sara");
+
+            var map = result.Items[0] as YamlMapping;
+
+            Assert.That(map, Is.Not.Null);
+            Assert.That(map.ContainsKey("good_people"), Is.True,
+                "Expected key 'good_people'");
+
+            var good_people = map["good_people"] as YamlSequence;
+
+            Assert.That(good_people, Is.Not.Null);
+            Assert.That(good_people.Count, Is.EqualTo(2));
+
+            var mapping = good_people[0] as YamlMapping;
+
+            Assert.That(mapping, Is.Not.Null);
+            Assert.That(mapping.ContainsKey("name"), Is.True);
+            Assert.That(mapping.ContainsKey("extras"), Is.True);
+
+            var extras = mapping["extras"] as YamlSequence;
+
+            Assert.That(extras, Is.Not.Null);
+            Assert.That(extras.Count, Is.EqualTo(1));
+
+            mapping = extras[0] as YamlMapping;
+
+            Assert.That(mapping, Is.Not.Null);
+            Assert.That(mapping.ContainsKey("mirror2"), Is.Not.Null);
+
+            var mirror2Seq = mapping["mirror2"] as YamlSequence;
+
+            Assert.That(mirror2Seq, Is.Not.Null);
+            Assert.That(mirror2Seq.Count, Is.EqualTo(2));
+            Assert.That(mirror2Seq[0].ToString(), Is.EqualTo("one"));
+            Assert.That(mirror2Seq[1].ToString(), Is.EqualTo("two"));
+        }
+
         private void VerifyPerson(YamlMapping mapping, string name, string reason)
         {
             Assert.That(mapping, Is.Not.Null);
