@@ -11,11 +11,7 @@ namespace YaYAML.Tests
             var result = Parse<YamlDocument>(x => x.Document,
                 "hr: 65");
 
-            var map = result.Items[0] as YamlMapping;
-
-            Assert.That(map, Is.Not.Null);
-            Assert.That(map.ContainsKey("hr"), Is.True);
-            Assert.That(map["hr"].ToString(), Is.EqualTo("65"));
+            Assert.That(result["hr"].ToString(), Is.EqualTo("65"));
         }
 
         [Test]
@@ -24,11 +20,7 @@ namespace YaYAML.Tests
             var result = Parse<YamlDocument>(x => x.Document,
                 "hr:    65");
 
-            var map = result.Items[0] as YamlMapping;
-
-            Assert.That(map, Is.Not.Null);
-            Assert.That(map.ContainsKey("hr"), Is.True);
-            Assert.That(map["hr"].ToString(), Is.EqualTo("65"));
+            Assert.That(result["hr"].ToString(), Is.EqualTo("65"));
         }
 
         [Test]
@@ -38,11 +30,7 @@ namespace YaYAML.Tests
                 "Fatal:",
                 "  Unknown variable \"bar\"");
 
-            var map = result.Items[0] as YamlMapping;
-
-            Assert.That(map, Is.Not.Null);
-            Assert.That(map.ContainsKey("Fatal"), Is.True);
-            Assert.That(map["Fatal"].ToString(), Is.EqualTo("Unknown variable \"bar\""));
+            Assert.That(result["Fatal"].ToString(), Is.EqualTo("Unknown variable \"bar\""));
         }
 
         [Test]
@@ -53,11 +41,7 @@ namespace YaYAML.Tests
                 "  A slightly different error",
                 "  message.");
 
-            var map = result.Items[0] as YamlMapping;
-
-            Assert.That(map, Is.Not.Null);
-            Assert.That(map.ContainsKey("Warning"), Is.True);
-            Assert.That(map["Warning"].ToString(), Is.EqualTo("A slightly different error message."));
+            Assert.That(result["Warning"].ToString(), Is.EqualTo("A slightly different error message."));
         }
 
         [Test]
@@ -68,15 +52,9 @@ namespace YaYAML.Tests
                 "avg: 0.278",
                 "rbi: 147");
 
-            var map = result.Items[0] as YamlMapping;
-
-            Assert.That(map, Is.Not.Null);
-            Assert.That(map.ContainsKey("hr"), Is.True);
-            Assert.That(map.ContainsKey("avg"), Is.True);
-            Assert.That(map.ContainsKey("rbi"), Is.True);
-            Assert.That(map["hr"].ToString(), Is.EqualTo("65"));
-            Assert.That(map["avg"].ToString(), Is.EqualTo("0.278"));
-            Assert.That(map["rbi"].ToString(), Is.EqualTo("147"));
+            Assert.That(result["hr"].ToString(), Is.EqualTo("65"));
+            Assert.That(result["avg"].ToString(), Is.EqualTo("0.278"));
+            Assert.That(result["rbi"].ToString(), Is.EqualTo("147"));
         }
 
         [Test]
@@ -92,19 +70,11 @@ namespace YaYAML.Tests
                 "  fourth",
                 "fifth: 5");
 
-            var map = result.Items[0] as YamlMapping;
-
-            Assert.That(map, Is.Not.Null);
-            Assert.That(map.ContainsKey("one"), Is.True);
-            Assert.That(map.ContainsKey("two"), Is.True);
-            Assert.That(map.ContainsKey("three"), Is.True);
-            Assert.That(map.ContainsKey("four"), Is.True);
-            Assert.That(map.ContainsKey("fifth"), Is.True);
-            Assert.That(map["one"].ToString(), Is.EqualTo("1"));
-            Assert.That(map["two"].ToString(), Is.EqualTo("2"));
-            Assert.That(map["three"].ToString(), Is.EqualTo("3"));
-            Assert.That(map["four"].ToString(), Is.EqualTo("this is the fourth"));
-            Assert.That(map["fifth"].ToString(), Is.EqualTo("5"));
+            Assert.That(result["one"].ToString(), Is.EqualTo("1"));
+            Assert.That(result["two"].ToString(), Is.EqualTo("2"));
+            Assert.That(result["three"].ToString(), Is.EqualTo("3"));
+            Assert.That(result["four"].ToString(), Is.EqualTo("this is the fourth"));
+            Assert.That(result["fifth"].ToString(), Is.EqualTo("5"));
         }
     }
 }

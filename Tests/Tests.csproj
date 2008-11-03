@@ -56,7 +56,6 @@
     <Compile Include="AbstractParserTestFixture.cs" />
     <Compile Include="ParsingFlatMappings.cs" />
     <Compile Include="ParsingFlatSequences.cs" />
-    <Compile Include="ParsingFullDocuments.cs" />
     <Compile Include="ParsingListOfMappingsWithListsAsValues.cs" />
     <Compile Include="ParsingMappingsWithSequencesAsValues.cs" />
     <Compile Include="ParsingMappingWithListOfMappings.cs" />

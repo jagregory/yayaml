@@ -25,6 +25,11 @@ namespace YaYAML
             }
         }
 
+        IEnumerator<IYamlEntity> IEnumerable<IYamlEntity>.GetEnumerator()
+        {
+            return internalDictionary.Values.GetEnumerator();
+        }
+
         public IEnumerator<KeyValuePair<string, IYamlEntity>> GetEnumerator()
         {
             return internalDictionary.GetEnumerator();
@@ -109,6 +114,11 @@ namespace YaYAML
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        IYamlEntity IIndexable<int, IYamlEntity>.this[int index]
+        {
+            get { return new List<IYamlEntity>(internalDictionary.Values)[index]; }
         }
     }
 }

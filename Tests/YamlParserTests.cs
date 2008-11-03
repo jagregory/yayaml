@@ -18,12 +18,8 @@ namespace YaYAML.Tests
             var yaml = new Yaml();
             var parsed = yaml.ParseText(content);
 
-            Assert.That(parsed, Is.Not.Null);
-            Assert.That(parsed.Items.Count, Is.EqualTo(1));
-            Assert.That(parsed.Items[0], Is.TypeOf<YamlSequence>());
-
-            var seq = (YamlSequence)parsed.Items[0];
-            Assert.That(seq.Count, Is.EqualTo(2));
+            Assert.That(parsed[0].ToString(), Is.EqualTo("hello"));
+            Assert.That(parsed[1].ToString(), Is.EqualTo("there"));
         }
 
         [Test]
@@ -32,12 +28,8 @@ namespace YaYAML.Tests
             var yaml = new Yaml();
             var parsed = yaml.ParseFile(@"Resources\Sample.yaml");
 
-            Assert.That(parsed, Is.Not.Null);
-            Assert.That(parsed.Items.Count, Is.EqualTo(1));
-            Assert.That(parsed.Items[0], Is.TypeOf<YamlSequence>());
-
-            var seq = (YamlSequence)parsed.Items[0];
-            Assert.That(seq.Count, Is.EqualTo(2));
+            Assert.That(parsed[0].ToString(), Is.EqualTo("hello"));
+            Assert.That(parsed[1].ToString(), Is.EqualTo("there"));
         }
 
         [Test]
@@ -46,29 +38,12 @@ namespace YaYAML.Tests
             var yaml = new Yaml();
             var parsed = yaml.ParseFile(@"Resources\NestedSample.yaml");
 
-            Assert.That(parsed, Is.Not.Null);
-
-            // container
-            Assert.That(parsed.Items.Count, Is.EqualTo(1));
-
-            var seq = parsed.Items[0] as YamlSequence;
-
-            Assert.That(seq, Is.Not.Null);
-            Assert.That(seq.Count, Is.EqualTo(2));
-
-            var first = seq[0] as YamlMapping;
-
-            Assert.That(first, Is.Not.Null);
-            Assert.That(first.ContainsKey("name"), Is.True);
-            Assert.That(first.ContainsKey("age"), Is.True);
-            Assert.That(first.ContainsKey("phones"), Is.True);
-
-            ValidatePersonYaml(seq[0] as YamlMapping, "James", "23", new[]
+            ValidatePersonYaml(parsed[0] as YamlMapping, "James", "23", new[]
             {
                 "01234 432123",
                 "01234 455674"
             });
-            ValidatePersonYaml(seq[1] as YamlMapping, "Sara", "23", new[]
+            ValidatePersonYaml(parsed[1] as YamlMapping, "Sara", "23", new[]
             {
                 "03323 412314",
                 "03432 885443"

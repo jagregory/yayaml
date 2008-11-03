@@ -80,5 +80,10 @@ namespace YaYAML
         {
             return GetEnumerator();
         }
+
+        IYamlEntity IIndexable<string, IYamlEntity>.this[string key]
+        {
+            get { return null; }
+        }
     }
 }
